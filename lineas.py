@@ -371,7 +371,7 @@ with tabs[0]:
                                    f"{np.degrees(np.angle(vr))+30:.2f}° kV")
         fila["Iph demanda"] = f"{abs(ir):.2f} ∠ {np.degrees(np.angle(ir)):.2f}° A"
         filas.append(fila)
-    st.dataframe(pd.DataFrame(filas), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(filas), width='stretch', hide_index=True)
 
     st.subheader("Potencias, pérdidas y desempeño")
     df_pq = pd.DataFrame([{
@@ -388,7 +388,7 @@ with tabs[0]:
         "Pérdidas P (MW)": "{:.3f}", "Balance Q (Mvar)": "{:+.3f}",
         "Regulación (%)": "{:.2f}", "Rendimiento (%)": "{:.2f}",
     }
-    st.dataframe(df_pq.style.format(fmt_pq), use_container_width=True, hide_index=True)
+    st.dataframe(df_pq.style.format(fmt_pq), width='stretch', hide_index=True)
 
     st.subheader("Constantes ABCD")
     st.dataframe(pd.DataFrame([{
@@ -397,7 +397,7 @@ with tabs[0]:
         "B (Ω)": f"{abs(r['B']):.3f} ∠ {np.degrees(np.angle(r['B'])):.3f}°",
         "C (µS)": f"{abs(r['C'])*1e6:.4f} ∠ {np.degrees(np.angle(r['C'])):.3f}°",
         "AD − BC": f"{r['det'].real:.9f} {r['det'].imag:+.2e}j",
-    } for n, r in RES.items()]), use_container_width=True, hide_index=True)
+    } for n, r in RES.items()]), width='stretch', hide_index=True)
 
     st.download_button("⬇ Descargar resultados (CSV)",
                        df_pq.round(3).to_csv(index=False).encode("utf-8"),
@@ -463,7 +463,7 @@ with tabs[1]:
         height=460, hovermode="x unified",
         legend=dict(orientation="h", y=1.12, font=dict(size=11)),
         margin=dict(l=20, r=20, t=40, b=40))
-    st.plotly_chart(fig, use_container_width=True, config={"displaylogo": False})
+    st.plotly_chart(fig, width='stretch', config={"displaylogo": False})
 
     if np.isfinite(Zsurge) and Zsurge > 0:
         V_ref_kv = abs(V_r_e) * k_ll / 1e3
@@ -533,7 +533,7 @@ with tabs[2]:
                    scaleratio=1, zeroline=True, zerolinecolor="rgba(128,128,128,0.5)"),
         height=520, legend=dict(font=dict(size=10)),
         margin=dict(l=20, r=20, t=30, b=40))
-    st.plotly_chart(figf, use_container_width=True, config={"displaylogo": False})
+    st.plotly_chart(figf, width='stretch', config={"displaylogo": False})
 
     delta = np.degrees(np.angle(EXACTO["V_s"]) - np.angle(EXACTO["V_r"]))
     st.caption(f"Ángulo de carga δ (entre Vs y Vr, modelo exacto): **{delta:.2f}°**. "
@@ -563,7 +563,7 @@ with tabs[3]:
         fmt_err = {c: ("{:+.3f}" if "°" in c or "p.p." in c else "{:+.4f}")
                    for c in df_err.columns if c != "Modelo"}
         st.dataframe(df_err.style.format(fmt_err),
-                     use_container_width=True, hide_index=True)
+                     width='stretch', hide_index=True)
     else:
         st.info("Ningún modelo aproximado tiene solución para esta carga, así que no hay "
                 "nada que comparar en este punto de operación.")
@@ -597,7 +597,7 @@ with tabs[3]:
                        yaxis_title=f"Error en |V {etq_calc}| respecto del exacto (%)",
                        height=420, hovermode="x unified",
                        margin=dict(l=20, r=20, t=30, b=40))
-    st.plotly_chart(fige, use_container_width=True, config={"displaylogo": False})
+    st.plotly_chart(fige, width='stretch', config={"displaylogo": False})
 
     st.caption("Criterio habitual: hasta ~80 km alcanza el modelo corto; entre ~80 y ~250 km "
                "el π nominal; por encima conviene el distribuido. El indicador independiente "
@@ -704,7 +704,7 @@ with tabs[4]:
     for st_tab, (nombre, r) in zip(st.tabs(list(RES.keys())), RES.items()):
         with st_tab:
             f_, sub = esquema(nombre, r)
-            st.plotly_chart(f_, use_container_width=True, config={"displaylogo": False})
+            st.plotly_chart(f_, width='stretch', config={"displaylogo": False})
             st.caption(sub)
 
 # ------------------------------------------------------------------
